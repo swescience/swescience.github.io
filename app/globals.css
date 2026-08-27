@@ -119,6 +119,11 @@ a { color: inherit; text-decoration: none; }
 .chart-summary { display: flex; align-items: center; justify-content: flex-end; gap: 14px; font-size: 13px; color: var(--muted); }
 .chart-summary > span:first-child { width: 8px; height: 8px; border-radius: 50%; }
 .chart-summary strong { color: var(--ink); font-weight: 600; }
+.clear-highlights {
+  padding: 5px 9px; border: 1px solid var(--control-border); border-radius: 999px; background: transparent;
+  color: var(--muted); cursor: pointer; font: inherit; transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.clear-highlights:hover { border-color: var(--ink); background: var(--row-hover); color: var(--ink); }
 
 .chart-scroll { width: 100%; }
 .chart-scroll:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent-dark) 40%, transparent); outline-offset: 4px; }
@@ -145,25 +150,40 @@ a { color: inherit; text-decoration: none; }
 .interactive-chart .recharts-shape:focus-visible,
 .interactive-chart .chart-point:focus-visible { outline: none !important; }
 .interactive-chart .recharts-cartesian-axis-tick-value { font-variant-numeric: tabular-nums; }
-.chart-point { cursor: pointer; }
+.chart-point { cursor: pointer; transition: opacity .18s ease; }
+.chart-point.dimmed { opacity: .14; }
 .chart-point-hit { fill: transparent; }
-.chart-point-halo { opacity: 0; transition: opacity .16s ease, r .16s ease; }
-.chart-point-ring, .chart-point-core { transition: r .16s ease, filter .16s ease; }
-.chart-point.selected .chart-point-ring { filter: drop-shadow(0 0 4px currentColor); }
+.chart-point-dot { transition: r .16s ease, filter .16s ease; }
+.chart-point.selected .chart-point-dot { filter: drop-shadow(0 0 3px currentColor); }
 .chart-point-label { pointer-events: none; opacity: .78; font-size: 10px; font-weight: 650; letter-spacing: -.015em; transition: opacity .16s ease; }
 .chart-point.selected .chart-point-label { opacity: 1; font-weight: 750; }
-.chart-point-depth { font-family: var(--font-geist-mono); font-size: 7.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .chart-tooltip { padding: 9px 11px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: 0 12px 30px var(--shadow-color); }
 .chart-tooltip strong, .chart-tooltip span { display: block; }
 .chart-tooltip strong { font-size: 13px; font-weight: 650; }
 .chart-tooltip span { margin-top: 4px; color: var(--muted); font-family: var(--font-geist-mono); font-size: 11px; }
 
-.legend-shape { display: block; border: 2px solid var(--surface); border-radius: 50%; background: var(--point-color); box-shadow: 0 0 0 1px color-mix(in srgb, var(--point-color) 78%, var(--ink)); }
-
-.model-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 20px 0 0 48px; }
-.model-legend button { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; transition: color .15s ease; }
-.model-legend button:hover, .model-legend button.active { color: var(--ink); }
-.legend-shape { width: 9px; height: 9px; flex: 0 0 auto; }
+.model-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 22px 0 0 48px; }
+.model-legend-item {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; border: 0;
+  background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; white-space: nowrap;
+  transition: color .15s ease, opacity .15s ease, transform .15s ease;
+}
+.model-legend-item:hover, .model-legend-item.active { color: var(--ink); }
+.model-legend-item.selected { color: var(--ink); font-weight: 720; }
+.model-legend-item:hover { transform: translateY(-1px); }
+.model-legend:has(.model-legend-item:hover) .model-legend-item:not(:hover):not(.selected) { opacity: .48; }
+.model-legend-item::after {
+  position: absolute; z-index: 20; bottom: calc(100% + 7px); left: 50%; padding: 6px 8px; border-radius: 5px;
+  background: var(--ink); color: var(--paper); box-shadow: 0 7px 20px var(--shadow-color); content: attr(data-tooltip);
+  font-family: var(--font-geist-sans); font-size: 10px; font-weight: 650; letter-spacing: 0; line-height: 1; white-space: nowrap;
+  opacity: 0; pointer-events: none; transform: translate(-50%, 3px); visibility: hidden;
+  transition: opacity .14s ease, transform .14s ease, visibility .14s ease;
+}
+.model-legend-item:hover::after, .model-legend-item:focus-visible::after { opacity: 1; transform: translate(-50%, 0); visibility: visible; }
+.legend-shape {
+  display: block; width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background-color: var(--point-color); transition: transform .14s ease;
+}
+.model-legend-item.selected .legend-shape { transform: scale(1.3); }
 .chart-note, .table-note { max-width: 72ch; margin: 30px 0 0 48px; color: var(--muted); font-size: 11px; line-height: 1.65; }
 
 .results-section { background: var(--panel); }
@@ -205,7 +225,7 @@ footer { display: flex; justify-content: space-between; padding: 26px clamp(20px
   .chart-toolbar { align-items: flex-start; flex-direction: column; }
   .chart-summary { justify-content: flex-start; flex-wrap: wrap; }
   .interactive-chart { height: 400px; }
-  .model-legend { padding-left: 36px; }
+  .model-legend { gap: 10px 20px; padding-left: 36px; }
   .chart-note { margin-left: 36px; }
   .table-meta { align-items: flex-start; flex-direction: column; }
   .table-sort-controls { justify-content: flex-start; }
@@ -216,12 +236,12 @@ footer { display: flex; justify-content: space-between; padding: 26px clamp(20px
   .hero h1 { font-size: clamp(54px, 18vw, 86px); }
   .benchmark-stats dd { font-size: 26px; }
   .leaderboard-section, .results-section { padding-right: 16px; padding-left: 16px; }
-  .chart-summary span:last-child { display: none; }
-  .model-legend { gap-right: 12px; }
+  .chart-summary > span:nth-of-type(3) { display: none; }
+  .model-legend { gap: 8px 16px; padding-left: 0; }
+  .model-legend-item { font-size: 11px; }
   .theme-toggle { min-width: 34px; padding-inline: 9px; }
   .theme-toggle-label { display: none; }
   .chart-point-label { font-size: 8.5px; }
-  .chart-point-depth { font-size: 6.5px; }
   footer { padding-inline: 16px; }
 }
 

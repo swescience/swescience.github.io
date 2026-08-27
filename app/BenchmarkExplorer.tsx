@@ -20,8 +20,6 @@ type ModelResult = {
   model: string;
   harness: string;
   color: string;
-  shape: "circle" | "square" | "diamond" | "triangle" | "hex";
-  hollow?: boolean;
   publicScore: number;
   privateScore: number;
   fail2Pass: number;
@@ -33,49 +31,66 @@ type ModelResult = {
   input: number;
   output: number;
   family: string;
+  company: string;
   depth: string;
 };
 
-const FAMILY_COLORS: Record<string, string> = {
-  "Claude-Opus-5": "#ec5b3f",
-  "DeepSeek-V4-Pro": "#f0a202",
-  "DeepSeek-V4-flash": "#159b76",
-  "GLM-5.2": "#d83c91",
-  "GPT-5.6-sol": "#1967d2",
-  "Kimi-K3": "#7c3aed",
-  "Nex N2": "#0ea5b7",
-  "Qwen3.5-397B": "#d97706",
-  "Agents-A1": "#0891b2",
-  "Qwen3.8-27B": "#0f9f9a",
-  "BigBang-v1": "#c026d3",
-  "Intern-S2-Preview-397B": "#65a30d",
-  "Qwen3.5-9B": "#f59e0b",
-  "Qwen3.6-35B-A3B": "#e11d48",
-  "Nex-N2-mini": "#06b6d4",
+const FAMILY_COMPANIES: Record<string, string> = {
+  "Claude-Opus-5": "Anthropic",
+  "DeepSeek-V4-Pro": "DeepSeek",
+  "DeepSeek-V4-flash": "DeepSeek",
+  "GLM-5.2": "Zhipu AI",
+  "GPT-5.6-sol": "OpenAI",
+  "Kimi-K3": "Moonshot AI",
+  "Nex N2": "Nex AGI",
+  "Nex-N2-mini": "Nex AGI",
+  "Qwen3.5-397B": "Alibaba",
+  "Qwen3.8-27B": "Alibaba",
+  "Qwen3.5-9B": "Alibaba",
+  "Qwen3.6-35B-A3B": "Alibaba",
+  "Agents-A1": "InternScience",
+  "BigBang-v1": "The Endless Frontier",
+  "Intern-S2-Preview-397B": "InternLM",
 };
+const COMPANY_COLORS: Record<string, string> = {
+  Anthropic: "#ec5b3f",
+  DeepSeek: "#f0a202",
+  "Moonshot AI": "#7c3aed",
+  "Zhipu AI": "#d83c91",
+  OpenAI: "#1967d2",
+  "Nex AGI": "#0ea5b7",
+  Alibaba: "#d97706",
+  InternScience: "#0891b2",
+  "The Endless Frontier": "#c026d3",
+  InternLM: "#65a30d",
+};
+const COMPANY_ORDER = Object.keys(COMPANY_COLORS);
 const FALLBACK_COLORS = ["#1967d2", "#159b76", "#d83c91", "#d97706", "#7c3aed"];
 const DEPTH_ORDER = { default: 0, high: 1, max: 2, xhigh: 3 } as const;
 
 function toModelResults(data: BenchmarkData): ModelResult[] {
-  return data.models.map((model, index) => ({
-    id: model.id,
-    model: getModelDisplayName(model),
-    family: model.family,
-    depth: model.reasoningDepth,
-    harness: model.harness,
-    color: FAMILY_COLORS[model.family] ?? FALLBACK_COLORS[index % FALLBACK_COLORS.length],
-    shape: "circle",
-    publicScore: model.scores.public,
-    privateScore: model.scores.private,
-    fail2Pass: model.scores.fail2Pass,
-    pass2Pass: model.scores.pass2Pass,
-    overall: model.scores.overall,
-    issue: model.scores.issue,
-    expert: model.scores.expert,
-    engineering: model.scores.engineering,
-    input: model.tokens.input,
-    output: model.tokens.output,
-  }));
+  return data.models.map((model, index) => {
+    const company = FAMILY_COMPANIES[model.family] ?? model.family;
+    return {
+      id: model.id,
+      model: getModelDisplayName(model),
+      family: model.family,
+      company,
+      depth: model.reasoningDepth,
+      harness: model.harness,
+      color: COMPANY_COLORS[company] ?? FALLBACK_COLORS[index % FALLBACK_COLORS.length],
+      publicScore: model.scores.public,
+      privateScore: model.scores.private,
+      fail2Pass: model.scores.fail2Pass,
+      pass2Pass: model.scores.pass2Pass,
+      overall: model.scores.overall,
+      issue: model.scores.issue,
+      expert: model.scores.expert,
+      engineering: model.scores.engineering,
+      input: model.tokens.input,
+      output: model.tokens.output,
+    };
+  });
 }
 
 function getDepthConnections(models: ModelResult[]) {
@@ -137,54 +152,52 @@ function createLabelLayout(data: ChartDatum[], metricMax: number, chartWidth: nu
   const plotRight = Math.max(plotLeft + 180, chartWidth - 22);
   const plotTop = 22;
   const plotBottom = chartHeight - 72;
-  const fontFactor = compact ? 5.3 : 6.35;
-  const depthFontFactor = compact ? 4.3 : 5;
-  const labelAscent = compact ? 11 : 13;
-  const labelDescent = compact ? 12 : 14;
+  const fontFactor = compact ? 5.1 : 5.8;
+  const labelAscent = compact ? 8 : 9;
+  const labelDescent = 3;
   const safeBounds = {
     left: 8,
     right: chartWidth - 8,
     top: 6,
-    bottom: plotBottom + 22,
+    bottom: plotBottom + 12,
   };
 
   const points = data.map((datum) => ({
     datum,
     x: plotLeft + (datum.x / metricMax) * (plotRight - plotLeft),
     y: plotTop + (1 - datum.y / 50) * (plotBottom - plotTop),
-    width: Math.max(datum.family.length * fontFactor, datum.depth.length * depthFontFactor),
+    width: datum.model.length * fontFactor,
   }));
 
   const pointBoxes = points.map(({ datum, x, y }) => ({
     id: datum.id,
-    left: x - 13,
-    right: x + 13,
-    top: y - 13,
-    bottom: y + 13,
+    left: x - 8,
+    right: x + 8,
+    top: y - 8,
+    bottom: y + 8,
   }));
   const placed: LabelBox[] = [];
   const layout: Record<string, LabelPlacement> = {};
 
   [...points].sort((a, b) => b.width - a.width).forEach(({ datum, x, y, width }) => {
-    const wouldOverflowLeft = x - width - 10 < safeBounds.left;
-    const wouldOverflowRight = x + width + 10 > safeBounds.right;
+    const wouldOverflowLeft = x - width - 9 < safeBounds.left;
+    const wouldOverflowRight = x + width + 9 > safeBounds.right;
     const preferLeft = wouldOverflowRight || (!wouldOverflowLeft && datum.x / metricMax > 0.64);
-    const wouldOverflowTop = y - 24 - labelAscent < safeBounds.top;
-    const wouldOverflowBottom = y + 18 + labelDescent > safeBounds.bottom;
-    const preferBelow = wouldOverflowTop || (!wouldOverflowBottom && datum.y / 50 > 0.82);
     const horizontal = preferLeft
-      ? [{ dx: -10, anchor: "end" as const }, { dx: 10, anchor: "start" as const }]
-      : [{ dx: 10, anchor: "start" as const }, { dx: -10, anchor: "end" as const }];
-    const vertical = preferBelow ? [18, -24] : [-24, 18];
+      ? [{ dx: -9, anchor: "end" as const }, { dx: 9, anchor: "start" as const }]
+      : [{ dx: 9, anchor: "start" as const }, { dx: -9, anchor: "end" as const }];
+    const preferBelow = y - 12 - labelAscent < safeBounds.top;
+    const nearOffset = preferBelow ? 15 : -11;
+    const farOffset = preferBelow ? -11 : 15;
     const candidates: LabelPlacement[] = [
-      { ...horizontal[0], dy: vertical[0] },
-      { ...horizontal[1], dy: vertical[0] },
-      { ...horizontal[0], dy: vertical[1] },
-      { ...horizontal[1], dy: vertical[1] },
-      { dx: 0, dy: preferBelow ? 30 : -36, anchor: "middle" },
-      { dx: 0, dy: preferBelow ? -36 : 30, anchor: "middle" },
-      { ...horizontal[0], dy: preferBelow ? 40 : -46 },
-      { ...horizontal[1], dy: preferBelow ? -46 : 40 },
+      { ...horizontal[0], dy: 3 },
+      { ...horizontal[1], dy: 3 },
+      { ...horizontal[0], dy: nearOffset },
+      { ...horizontal[1], dy: nearOffset },
+      { ...horizontal[0], dy: farOffset },
+      { ...horizontal[1], dy: farOffset },
+      { dx: 0, dy: nearOffset, anchor: "middle" },
+      { dx: 0, dy: farOffset, anchor: "middle" },
     ];
 
     const evaluated = candidates.map((candidate, priority) => {
@@ -213,7 +226,7 @@ function createLabelLayout(data: ChartDatum[], metricMax: number, chartWidth: nu
     const best = bounded.length
       ? bounded.reduce((current, option) => option.score < current.score ? option : current)
       : (() => {
-          const preferredDy = preferBelow ? 18 : -24;
+          const preferredDy = preferBelow ? 15 : -11;
           const labelX = Math.min(
             safeBounds.right - width / 2,
             Math.max(safeBounds.left + width / 2, x),
@@ -258,6 +271,10 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
   const models = useMemo(() => toModelResults(data), [data]);
   const [tokenMetric, setTokenMetric] = useState<TokenMetric>("input");
   const [activeId, setActiveId] = useState<string>(() => data.models[0].id);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
+  const [hoveredLegendId, setHoveredLegendId] = useState<string | null>(null);
+  const [hoveredChartId, setHoveredChartId] = useState<string | null>(null);
+  const [hoveredTableId, setHoveredTableId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("overall");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [chartWidth, setChartWidth] = useState(960);
@@ -281,9 +298,18 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
       : leftValue - Number(rightValue);
     return sortDirection === "desc" ? -difference : difference;
   }), [models, sortDirection, sortKey]);
+  const legendModels = useMemo(() => [...models].sort((left, right) => {
+    const leftRank = COMPANY_ORDER.indexOf(left.company);
+    const rightRank = COMPANY_ORDER.indexOf(right.company);
+    return (leftRank === -1 ? COMPANY_ORDER.length : leftRank)
+      - (rightRank === -1 ? COMPANY_ORDER.length : rightRank);
+  }), [models]);
 
-  const activeModel = models.find((model) => model.id === activeId) ?? models[0];
-  const chartColors = { grid: "var(--chart-grid)", axis: "var(--chart-axis)", text: "var(--chart-text)", pointSurface: "var(--surface)", label: "var(--ink)" };
+  const selectedIdList = [...selectedIds];
+  const lastSelectedId = selectedIdList[selectedIdList.length - 1];
+  const focusedId = hoveredLegendId ?? hoveredChartId ?? hoveredTableId ?? lastSelectedId ?? activeId;
+  const activeModel = models.find((model) => model.id === focusedId) ?? models[0];
+  const chartColors = { grid: "var(--chart-grid)", axis: "var(--chart-axis)", text: "var(--chart-text)", label: "var(--ink)" };
   const metricMax = tokenMetric === "input" ? 24 : 0.24;
   const ticks = tokenMetric === "input" ? [0, 5, 10, 15, 20] : [0, 0.04, 0.08, 0.12, 0.16, 0.20, 0.24];
   const chartData = useMemo<ChartDatum[]>(() => models.map((model) => ({
@@ -291,30 +317,42 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
     x: model[tokenMetric],
     y: model.overall,
   })), [models, tokenMetric]);
+  const labeledModelIds = useMemo(() => new Set([
+    ...models
+      .filter((model) => model.overall >= 20)
+      .map((model) => model.id),
+    ...selectedIds,
+    focusedId,
+  ]), [focusedId, models, selectedIds]);
   const depthConnections = useMemo(() => getDepthConnections(models), [models]);
-  const labelLayout = useMemo(() => createLabelLayout(chartData, metricMax, chartWidth), [chartData, chartWidth, metricMax]);
+  const labelLayout = useMemo(
+    () => createLabelLayout(chartData.filter((model) => labeledModelIds.has(model.id)), metricMax, chartWidth),
+    [chartData, chartWidth, labeledModelIds, metricMax],
+  );
 
   function renderPoint(props: ScatterShapeProps) {
     const datum = props.payload as ChartDatum;
     const { cx, cy } = props;
     if (cx == null || cy == null) return null;
 
-    const selected = activeId === datum.id || props.isActive;
-    const placement = labelLayout[datum.id] ?? { dx: 9, dy: -11, anchor: "start" as const };
+    const selected = selectedIds.has(datum.id) || focusedId === datum.id || props.isActive;
+    const dimmed = (hoveredLegendId !== null || selectedIds.size > 0)
+      && !selectedIds.has(datum.id)
+      && focusedId !== datum.id;
+    const placement = labelLayout[datum.id] ?? { dx: 9, dy: 3, anchor: "start" as const };
     const labelX = cx + placement.dx;
     const labelY = cy + placement.dy;
-    const depthLineOffset = chartWidth <= 640 ? 10 : 12;
+    const showLabel = labeledModelIds.has(datum.id);
 
     return (
-      <g className={`chart-point${selected ? " selected" : ""}`} style={{ color: datum.color }}>
+      <g className={`chart-point${selected ? " selected" : ""}${dimmed ? " dimmed" : ""}`} style={{ color: datum.color }}>
         <circle className="chart-point-hit" cx={cx} cy={cy} r={15} />
-        <circle className="chart-point-halo" cx={cx} cy={cy} r={selected ? 13 : 9} fill={datum.color} />
-        <circle className="chart-point-ring" cx={cx} cy={cy} r={selected ? 8 : 6} fill={chartColors.pointSurface} stroke={datum.color} strokeWidth={1.5} />
-        <circle className="chart-point-core" cx={cx} cy={cy} r={selected ? 5.5 : 4} fill={datum.color} />
-        <text className="chart-point-label" x={labelX} y={labelY} fill={chartColors.label} textAnchor={placement.anchor} aria-hidden="true">
-          <tspan x={labelX}>{datum.family}</tspan>
-          <tspan className="chart-point-depth" x={labelX} dy={depthLineOffset} fill={datum.color}>{datum.depth}</tspan>
-        </text>
+        <circle className="chart-point-dot" cx={cx} cy={cy} r={selected ? 7 : 5} fill={datum.color} />
+        {showLabel && (
+          <text className="chart-point-label" x={labelX} y={labelY} fill={chartColors.label} textAnchor={placement.anchor} aria-hidden="true">
+            {datum.model}
+          </text>
+        )}
       </g>
     );
   }
@@ -325,6 +363,16 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
       setSortKey(key);
       setSortDirection("desc");
     }
+  }
+
+  function toggleModelHighlight(id: string) {
+    setActiveId(id);
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   }
 
   return (
@@ -346,10 +394,15 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
             </div>
           </div>
           <div className="chart-summary" aria-live="polite">
-            <span style={{ backgroundColor: activeModel.color }} />
+            <span style={{ backgroundColor: activeModel.color }} aria-hidden="true" />
             <strong>{activeModel.model}</strong>
             <span>{formatPct(activeModel.overall)} Pass@1</span>
             <span>{tokenMetric === "input" ? `${activeModel.input.toFixed(3)}M input` : `${activeModel.output.toFixed(3)}M output`}</span>
+            {selectedIds.size > 0 && (
+              <button className="clear-highlights" type="button" onClick={() => setSelectedIds(new Set())}>
+                Clear {selectedIds.size}
+              </button>
+            )}
           </div>
         </div>
 
@@ -410,7 +463,11 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
                     ]}
                     stroke={from.color}
                     strokeWidth={2}
-                    strokeOpacity={0.7}
+                    strokeOpacity={hoveredLegendId === null && selectedIds.size === 0
+                      ? 0.7
+                      : selectedIds.has(from.id) || selectedIds.has(to.id) || from.id === focusedId || to.id === focusedId
+                        ? 0.5
+                        : 0.08}
                     ifOverflow="hidden"
                     zIndex={120}
                   />
@@ -422,8 +479,9 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
                 activeShape={renderPoint}
                 isAnimationActive={false}
                 zIndex={300}
-                onMouseEnter={(point) => setActiveId((point.payload as ChartDatum).id)}
-                onClick={(point) => setActiveId((point.payload as ChartDatum).id)}
+                onMouseEnter={(point) => setHoveredChartId((point.payload as ChartDatum).id)}
+                onMouseLeave={() => setHoveredChartId(null)}
+                onClick={(point) => toggleModelHighlight((point.payload as ChartDatum).id)}
               />
               </ScatterChart>
             </ResponsiveContainer>
@@ -431,14 +489,26 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
         </div>
 
         <div className="model-legend" aria-label="Model configurations">
-          {models.map((model) => (
-            <button key={model.id} className={activeId === model.id ? "active" : ""} onClick={() => setActiveId(model.id)}>
-              <span className={`legend-shape shape-${model.shape}${model.hollow ? " hollow" : ""}`} style={{ "--point-color": model.color } as React.CSSProperties} />
-              {model.model}
+          {legendModels.map((model) => (
+            <button
+              className={`model-legend-item${focusedId === model.id ? " active" : ""}${selectedIds.has(model.id) ? " selected" : ""}`}
+              key={model.id}
+              type="button"
+              onMouseEnter={() => setHoveredLegendId(model.id)}
+              onMouseLeave={() => setHoveredLegendId(null)}
+              onFocus={() => setHoveredLegendId(model.id)}
+              onBlur={() => setHoveredLegendId(null)}
+              onClick={() => toggleModelHighlight(model.id)}
+              aria-pressed={selectedIds.has(model.id)}
+              aria-label={`${selectedIds.has(model.id) ? "Remove highlight from" : "Highlight"} ${model.model} by ${model.company}`}
+              data-tooltip={selectedIds.has(model.id) ? "Click to remove highlight" : "Click to highlight"}
+            >
+              <span className="legend-shape" style={{ "--point-color": model.color } as React.CSSProperties} aria-hidden="true" />
+              <span>{model.model}</span>
             </button>
           ))}
         </div>
-        <p className="chart-note">All configurations are evaluated on the same {data.summary.tasks} tasks. Token counts are per-task means; same-color lines connect different reasoning depths of the same model.</p>
+        <p className="chart-note">Labels show every configuration at or above 20% Pass@1, plus every highlighted model. Click multiple legend items or chart points to compare them; click again to remove a highlight.</p>
       </section>
 
       <section className="results-section" aria-labelledby="results-title">
@@ -489,9 +559,22 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
             </thead>
             <tbody>
               {sorted.map((model, index) => (
-                <tr key={model.id} className={activeId === model.id ? "active-row" : ""} onMouseEnter={() => setActiveId(model.id)}>
+                <tr
+                  key={model.id}
+                  className={focusedId === model.id || selectedIds.has(model.id) ? "active-row" : ""}
+                  onMouseEnter={() => setHoveredTableId(model.id)}
+                  onMouseLeave={() => setHoveredTableId(null)}
+                >
                   <td className="rank-column"><span className={index < 3 ? "top-rank" : ""}>{String(index + 1).padStart(2, "0")}</span></td>
-                  <th scope="row" className="model-column"><button onClick={() => setActiveId(model.id)}>{model.model}</button></th>
+                  <th scope="row" className="model-column">
+                    <button
+                      onClick={() => toggleModelHighlight(model.id)}
+                      aria-pressed={selectedIds.has(model.id)}
+                      aria-label={`${selectedIds.has(model.id) ? "Remove highlight from" : "Highlight"} ${model.model}`}
+                    >
+                      {model.model}
+                    </button>
+                  </th>
                   <td>{model.harness}</td>
                   {SCORE_COLUMNS.map(([key]) => (
                     <td key={key} className={key === "overall" ? "overall-column" : ""}>{formatPct(model[key])}</td>
