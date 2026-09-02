@@ -12,9 +12,12 @@
   "modelIds": [
     "opus",
     "deepseek-pro",
-    "gpt",
     "kimi",
     "glm",
-    "qwen-3-8-27b"
+    "gpt",
+    "nex",
+    "deepseek-max",
+    "qwen-3-8-27b",
+    "intern-s2-preview-397b"
   ]
 }

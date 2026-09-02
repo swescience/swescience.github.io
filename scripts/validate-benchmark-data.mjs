@@ -4,6 +4,7 @@ const dataUrl = new URL("../data/benchmark.json", import.meta.url);
 const data = JSON.parse(await readFile(dataUrl, "utf8"));
 const matrix = JSON.parse(await readFile(new URL("../data/task-matrix.json", import.meta.url), "utf8"));
 const hard70 = JSON.parse(await readFile(new URL("../data/hard70.json", import.meta.url), "utf8"));
+const hard70ModelResults = JSON.parse(await readFile(new URL("../data/hard70-model-results.json", import.meta.url), "utf8"));
 const failures = [];
 
 function check(condition, message) {
@@ -49,18 +50,37 @@ check(Array.isArray(hard70.taskIds) && hard70.taskIds.length === 70, "hard70.tas
 check(new Set(hard70.taskIds ?? []).size === 70, "hard70.taskIds must be unique");
 check(Array.isArray(hard70.modelIds) && hard70.modelIds.length > 0, "hard70.modelIds must be a non-empty array");
 check(new Set(hard70.modelIds ?? []).size === hard70.modelIds?.length, "hard70.modelIds must be unique");
+const expectedHard70ModelIds = data.models.filter((model) => model.scores.overall > 20).map((model) => model.id);
+check(JSON.stringify(hard70.modelIds) === JSON.stringify(expectedHard70ModelIds), "hard70.modelIds must include every model above 20% overall Pass@1");
+check(hard70ModelResults.version === 1, "hard70-model-results.version must be 1");
+check(hard70ModelResults.taskCount === data.summary.tasks, "hard70-model-results.taskCount must match the benchmark task count");
 
 const matrixTasks = new Map((matrix.tasks ?? []).map((task) => [task.publishedTaskId, task]));
+const supplementalModelIds = new Set(Object.keys(hard70ModelResults.modelPasses ?? {}));
 for (const taskId of hard70.taskIds ?? []) {
   check(/^\d{3}$/.test(taskId), `Hard70 task ID must use three digits (${taskId})`);
   check(matrixTasks.has(taskId), `Hard70 task is missing from task-matrix.json (${taskId})`);
 }
 for (const modelId of hard70.modelIds ?? []) {
   check(ids.has(modelId), `Hard70 model is missing from benchmark.json (${modelId})`);
-  check(matrix.models?.some((model) => model.id === modelId), `Hard70 model is missing from task-matrix.json (${modelId})`);
+  const hasMatrixResults = matrix.models?.some((model) => model.id === modelId);
+  check(hasMatrixResults || supplementalModelIds.has(modelId), `Hard70 model has no task-level results (${modelId})`);
   for (const taskId of hard70.taskIds ?? []) {
-    check([0, 1].includes(matrixTasks.get(taskId)?.results?.[modelId]?.reward), `Hard70 result is missing for ${modelId} task ${taskId}`);
+    const matrixReward = matrixTasks.get(taskId)?.results?.[modelId]?.reward;
+    check([0, 1].includes(matrixReward) || supplementalModelIds.has(modelId), `Hard70 result is missing for ${modelId} task ${taskId}`);
   }
+}
+
+for (const [modelId, passedTaskIds] of Object.entries(hard70ModelResults.modelPasses ?? {})) {
+  const model = data.models.find((candidate) => candidate.id === modelId);
+  check(hard70.modelIds.includes(modelId), `Supplemental Hard70 model is not selected (${modelId})`);
+  check(Array.isArray(passedTaskIds), `Supplemental pass list must be an array (${modelId})`);
+  check(new Set(passedTaskIds).size === passedTaskIds.length, `Supplemental pass list must be unique (${modelId})`);
+  for (const taskId of passedTaskIds) {
+    check(/^\d{3}$/.test(taskId) && matrixTasks.has(taskId), `Supplemental pass list has an invalid task (${modelId} ${taskId})`);
+  }
+  const overall = Number(((passedTaskIds.length / hard70ModelResults.taskCount) * 100).toFixed(2));
+  check(overall === model?.scores.overall, `Supplemental pass list does not match overall Pass@1 (${modelId})`);
 }
 
 if (failures.length > 0) {

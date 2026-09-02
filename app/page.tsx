@@ -34,7 +34,14 @@ export default function Home() {
             Measuring whether coding agents can repair repository-level scientific software while preserving its scientific contracts.
           </p>
           <dl className="benchmark-stats" aria-label="Benchmark statistics">
-            <div><dt>Tasks</dt><dd><AnimatedStat value={benchmarkData.summary.tasks} /></dd></div>
+            <div>
+              <dt className="benchmark-task-label">
+                <span>Tasks</span>
+                <span className="benchmark-task-separator" aria-hidden="true">·</span>
+                <a className="benchmark-subset-link" href="#hard70">Hard70 subset <span aria-hidden="true">↓</span></a>
+              </dt>
+              <dd><AnimatedStat value={benchmarkData.summary.tasks} /></dd>
+            </div>
             <div><dt>Repositories</dt><dd><AnimatedStat value={benchmarkData.summary.repositories} /></dd></div>
             <div><dt>Domains</dt><dd><AnimatedStat value={benchmarkData.summary.domains} /></dd></div>
           </dl>

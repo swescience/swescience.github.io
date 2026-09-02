@@ -94,15 +94,21 @@ a { color: inherit; text-decoration: none; }
 .hero h1 em { color: var(--accent-dark); font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
 .hero-bottom { display: grid; grid-template-columns: minmax(280px, 530px) 1fr; gap: clamp(40px, 9vw, 150px); align-items: end; margin-top: clamp(56px, 8vw, 108px); }
 .hero-bottom > p { max-width: 52ch; margin: 0; color: var(--body-copy); font-size: clamp(17px, 2vw, 23px); line-height: 1.48; letter-spacing: -.02em; }
-.benchmark-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 0; border-top: 1px solid var(--ink); }
+.benchmark-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 0; border-top: 1px solid var(--ink); }
 .benchmark-stats div { padding: 14px 12px 0 0; }
 .benchmark-stats dt { color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .benchmark-stats dd { margin: 9px 0 0; font-family: var(--font-geist-mono); font-size: clamp(24px, 3vw, 42px); letter-spacing: -.06em; }
+.benchmark-task-label { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.benchmark-task-separator { color: var(--control-border); }
+.benchmark-subset-link { color: var(--accent-dark); font-size: 9px; font-weight: 750; letter-spacing: .02em; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.benchmark-subset-link:hover { color: var(--ink); }
 .stat-number-flow { line-height: .85; font-variant-numeric: tabular-nums; --number-flow-mask-height: .18em; }
 
 .leaderboard-section, .results-section, .hard70-section { padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 64px); border-top: 1px solid var(--ink); }
 .leaderboard-section { background: var(--surface); color: var(--ink); }
 .hard70-section { background: var(--surface); color: var(--ink); }
+.hard70-methodology { max-width: 98ch; margin: 0 0 30px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.hard70-methodology code { color: inherit; font: inherit; }
 .section-heading { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin-bottom: clamp(36px, 5vw, 64px); }
 .section-heading > div { display: flex; align-items: start; gap: 14px; }
 .section-number { color: var(--accent-dark); font-family: var(--font-geist-mono); font-size: 10px; padding-top: 9px; }
@@ -213,13 +219,15 @@ tbody tr:hover, tbody tr.active-row { background: var(--row-hover); }
 .table-note { margin-left: 0; color: var(--muted); }
 
 .hard70-table-wrap { overflow-x: auto; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
-.hard70-table { width: 100%; min-width: 720px; table-layout: fixed; }
+.hard70-table { width: 100%; min-width: 920px; table-layout: fixed; }
 .hard70-table th, .hard70-table td { height: 58px; padding: 10px 12px; }
 .hard70-table thead th { height: auto; padding-top: 13px; padding-bottom: 13px; }
-.hard70-table .hard70-rank-column { width: 72px; text-align: left; }
-.hard70-table .hard70-model-column { width: 31%; text-align: left; }
-.hard70-table .hard70-agent-column { width: 22%; text-align: left; }
-.hard70-table .hard70-score-column { width: 47%; text-align: left; }
+.hard70-table .hard70-rank-column { width: 6%; text-align: left; }
+.hard70-table .hard70-model-column { width: 27%; text-align: left; }
+.hard70-table .hard70-agent-column { width: 18%; text-align: left; }
+.hard70-table .hard70-score-column { width: 33%; text-align: left; }
+.hard70-table .hard70-input-column { width: 16%; text-align: right; }
+.hard70-input-column { font-family: var(--font-geist-mono); font-variant-numeric: tabular-nums; }
 .hard70-score { display: grid; grid-template-columns: 76px minmax(180px, 1fr); align-items: center; gap: 18px; }
 .hard70-score strong { color: var(--ink); font-family: var(--font-geist-mono); font-size: 13px; font-weight: 750; }
 .hard70-bar { position: relative; display: block; height: 12px; overflow: hidden; background: var(--row-hover); }

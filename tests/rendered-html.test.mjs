@@ -13,10 +13,18 @@ test("renders the SWE-bench Science project page", async () => {
   assert.match(html, /task-matrix\/gradient/);
   assert.match(html, /Hard70/);
   assert.match(html, /id="hard70"/);
-  assert.match(html, /Pass@1 on the 70-task hard subset/);
+  assert.match(html, /Models above 20% on the full benchmark, evaluated on the Hard70 subset/);
+  assert.match(html, /As of August 28, 2026, 16:31 UTC/);
+  assert.match(html, /select the 70 tasks with the lowest mean reward as this subset/);
+  assert.match(html, /href="#hard70">Hard70 subset/);
   assert.match(html, /21\.43%/);
   assert.match(html, /20\.00%/);
   assert.match(html, /14\.29%/);
+  assert.match(html, /Input tokens \/ task/);
+  assert.match(html, /21\.990/);
+  assert.match(html, /Nex N2/);
+  assert.match(html, /DeepSeek-V4-flash \(max\)/);
+  assert.match(html, /Intern-S2-Preview-397B \(max\)/);
   assert.match(html, /<summary>Tasks in Hard70/);
   assert.match(html, /001, 002, 003, 005/);
   assert.match(html, /114, 116, 117, 119/);
@@ -25,18 +33,26 @@ test("renders the SWE-bench Science project page", async () => {
 
 test("computes the Hard70 leaderboard from task-level results", async () => {
   const hard70 = JSON.parse(await readFile(new URL("../data/hard70.json", import.meta.url), "utf8"));
+  const benchmark = JSON.parse(await readFile(new URL("../data/benchmark.json", import.meta.url), "utf8"));
   const matrix = JSON.parse(await readFile(new URL("../data/task-matrix.json", import.meta.url), "utf8"));
+  const supplemental = JSON.parse(await readFile(new URL("../data/hard70-model-results.json", import.meta.url), "utf8"));
   assert.equal(hard70.taskIds.length, 70);
   assert.equal(new Set(hard70.taskIds).size, 70);
-  assert.deepEqual(hard70.modelIds, ["opus", "deepseek-pro", "gpt", "kimi", "glm", "qwen-3-8-27b"]);
+  assert.deepEqual(hard70.modelIds, benchmark.models.filter((model) => model.scores.overall > 20).map((model) => model.id));
 
-  const expectedPassCounts = { opus: 15, "deepseek-pro": 14, gpt: 10, kimi: 5, glm: 4, "qwen-3-8-27b": 4 };
+  const expectedPassCounts = { opus: 15, "deepseek-pro": 14, gpt: 10, kimi: 5, glm: 4, "qwen-3-8-27b": 4, nex: 2, "deepseek-max": 1, "intern-s2-preview-397b": 1 };
   for (const [modelId, expected] of Object.entries(expectedPassCounts)) {
-    const passed = matrix.tasks
-      .filter((task) => hard70.taskIds.includes(task.publishedTaskId))
-      .filter((task) => task.results[modelId].reward === 1)
-      .length;
+    const supplementalPasses = new Set(supplemental.modelPasses[modelId] ?? []);
+    const passed = hard70.taskIds.filter((taskId) => {
+      const task = matrix.tasks.find((candidate) => candidate.publishedTaskId === taskId);
+      return task.results[modelId]?.reward === 1 || supplementalPasses.has(taskId);
+    }).length;
     assert.equal(passed, expected, `${modelId} Hard70 pass count`);
+  }
+
+  for (const [modelId, passedTaskIds] of Object.entries(supplemental.modelPasses)) {
+    const model = benchmark.models.find((candidate) => candidate.id === modelId);
+    assert.equal(Number(((passedTaskIds.length / supplemental.taskCount) * 100).toFixed(2)), model.scores.overall);
   }
 });
 

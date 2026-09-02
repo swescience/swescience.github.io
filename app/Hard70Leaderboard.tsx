@@ -1,4 +1,5 @@
 import hard70Data from "@/data/hard70.json";
+import hard70ModelResults from "@/data/hard70-model-results.json";
 import matrixData from "@/data/task-matrix.json";
 import { benchmarkData, getModelDisplayName } from "@/lib/benchmark";
 
@@ -9,6 +10,9 @@ type MatrixTask = {
 
 const hard70 = hard70Data as { taskIds: string[]; modelIds: string[] };
 const matrix = matrixData as { tasks: MatrixTask[] };
+const supplementalPasses = new Map(
+  Object.entries(hard70ModelResults.modelPasses).map(([modelId, taskIds]) => [modelId, new Set(taskIds)]),
+);
 
 export function Hard70Leaderboard() {
   const tasksById = new Map(matrix.tasks.map((task) => [task.publishedTaskId, task]));
@@ -17,7 +21,9 @@ export function Hard70Leaderboard() {
     if (!model) throw new Error(`Hard70 model is missing from benchmark data: ${modelId}`);
 
     const passed = hard70.taskIds.reduce((total, taskId) => {
-      return total + (tasksById.get(taskId)?.results[modelId]?.reward === 1 ? 1 : 0);
+      const matrixReward = tasksById.get(taskId)?.results[modelId]?.reward;
+      const reward = matrixReward ?? (supplementalPasses.get(modelId)?.has(taskId) ? 1 : 0);
+      return total + (reward === 1 ? 1 : 0);
     }, 0);
 
     return {
@@ -35,8 +41,12 @@ export function Hard70Leaderboard() {
           <span className="section-number">03</span>
           <h2 id="hard70-title">Hard70</h2>
         </div>
-        <p>Pass@1 on the 70-task hard subset.</p>
+        <p>Models above 20% on the full benchmark, evaluated on the Hard70 subset.</p>
       </div>
+
+      <p className="hard70-methodology">
+        As of August 28, 2026, 16:31 UTC, we estimated task difficulty using the 12 models with complete results for all 119 tasks available at that time: Claude Opus 5 Max, GLM-5.2, Qwen3.8-27B, GPT-5.6-sol, Nex-N2-Pro, DeepSeek V4 Flash, Intern-S2-Preview-397B, Qwen3.6-35B-A3B, Nex-N2-mini, agents-a1, BigBang-v1, and Qwen3.5-9B. For each task, a model receives a binary reward of <code>1</code> if it passes the complete task evaluation and <code>0</code> otherwise. We average these rewards across the 12 models and select the 70 tasks with the lowest mean reward as this subset.
+      </p>
 
       <div className="hard70-table-wrap">
         <table className="hard70-table">
@@ -46,6 +56,7 @@ export function Hard70Leaderboard() {
               <th scope="col" className="hard70-model-column">Model</th>
               <th scope="col" className="hard70-agent-column">Agent</th>
               <th scope="col" className="hard70-score-column">Pass@1</th>
+              <th scope="col" className="hard70-input-column">Input tokens / task</th>
             </tr>
           </thead>
           <tbody>
@@ -71,6 +82,9 @@ export function Hard70Leaderboard() {
                         <i style={{ width: score }} />
                       </span>
                     </div>
+                  </td>
+                  <td className="hard70-input-column" title="Mean input tokens per task on the full benchmark">
+                    {row.model.tokens.input.toFixed(3)}M
                   </td>
                 </tr>
               );
