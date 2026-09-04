@@ -1,0 +1,107 @@
+name: Deploy production server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-server
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and verify
+        env:
+          NEXT_PUBLIC_SITE_URL: https://118.196.152.186/
+        run: |
+          npm run build
+          node --test tests/rendered-html.test.mjs
+          npm run lint
+
+      - name: Configure SSH
+        env:
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/id_ed25519"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/id_ed25519" "$HOME/.ssh/known_hosts"
+
+      - name: Upload release
+        env:
+          RELEASE_ID: ${{ github.sha }}
+        run: |
+          ssh -o BatchMode=yes swescience-deploy@118.196.152.186 \
+            "mkdir -p /opt/swe-bench-science/deploy/releases/$RELEASE_ID"
+          rsync --archive --compress --delete \
+            out/ \
+            "swescience-deploy@118.196.152.186:/opt/swe-bench-science/deploy/releases/$RELEASE_ID/"
+
+      - name: Activate release
+        env:
+          RELEASE_ID: ${{ github.sha }}
+        run: |
+          ssh -o BatchMode=yes swescience-deploy@118.196.152.186 \
+            bash -se -- "$RELEASE_ID" <<'REMOTE'
+          release_id="$1"
+          if [[ ! "$release_id" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid release id: $release_id" >&2
+            exit 1
+          fi
+
+          deploy_dir=/opt/swe-bench-science/deploy
+          releases_dir="$deploy_dir/releases"
+          release_dir="$releases_dir/$release_id"
+          current_link="$deploy_dir/current"
+          previous_target="$(readlink -f "$current_link" || true)"
+
+          test -f "$release_dir/index.html"
+          test -f "$release_dir/task-matrix/gradient/index.html"
+          test -f "$release_dir/traces/index.json"
+
+          ln -sfn "$release_dir" "$deploy_dir/current.next"
+          mv -Tf "$deploy_dir/current.next" "$current_link"
+
+          if ! curl -fsS -o /dev/null http://127.0.0.1/; then
+            if [[ -n "$previous_target" ]]; then
+              ln -sfn "$previous_target" "$deploy_dir/current.next"
+              mv -Tf "$deploy_dir/current.next" "$current_link"
+            fi
+            echo "Health check failed; restored previous release" >&2
+            exit 1
+          fi
+
+          mapfile -t old_releases < <(
+            find "$releases_dir" -mindepth 1 -maxdepth 1 -type d \
+              -printf '%T@ %p\n' | sort -nr | cut -d' ' -f2- | tail -n +4
+          )
+          for old_release in "${old_releases[@]}"; do
+            rm -rf -- "$old_release"
+          done
+          REMOTE
+
+      - name: Verify public site
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 2 \
+            --output /dev/null https://118.196.152.186/
