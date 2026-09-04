@@ -16,7 +16,7 @@ test("renders the SWE-bench Science project page", async () => {
   assert.match(html, /Models above 20% on the full benchmark, evaluated on the Hard70 subset/);
   assert.match(html, /As of August 28, 2026, 16:31 UTC/);
   assert.match(html, /select the 70 tasks with the lowest mean reward as this subset/);
-  assert.match(html, /href="#hard70">Hard70 subset/);
+  assert.match(html, /href="#hard70">\(HARD70\)/);
   assert.match(html, /21\.43%/);
   assert.match(html, /20\.00%/);
   assert.match(html, /14\.29%/);

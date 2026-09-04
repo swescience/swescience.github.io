@@ -35,12 +35,11 @@ export default function Home() {
           </p>
           <dl className="benchmark-stats" aria-label="Benchmark statistics">
             <div>
-              <dt className="benchmark-task-label">
-                <span>Tasks</span>
-                <span className="benchmark-task-separator" aria-hidden="true">·</span>
-                <a className="benchmark-subset-link" href="#hard70">Hard70 subset <span aria-hidden="true">↓</span></a>
-              </dt>
-              <dd><AnimatedStat value={benchmarkData.summary.tasks} /></dd>
+              <dt>Tasks</dt>
+              <dd className="benchmark-task-count">
+                <AnimatedStat value={benchmarkData.summary.tasks} />
+                <a className="benchmark-subset-link" href="#hard70">(HARD70)</a>
+              </dd>
             </div>
             <div><dt>Repositories</dt><dd><AnimatedStat value={benchmarkData.summary.repositories} /></dd></div>
             <div><dt>Domains</dt><dd><AnimatedStat value={benchmarkData.summary.domains} /></dd></div>
