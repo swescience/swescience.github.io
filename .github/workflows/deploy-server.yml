@@ -48,13 +48,44 @@ jobs:
           printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
           chmod 600 "$HOME/.ssh/id_ed25519" "$HOME/.ssh/known_hosts"
 
-      - name: Upload release
+      - name: Prepare release
         env:
           RELEASE_ID: ${{ github.sha }}
         run: |
           ssh -o BatchMode=yes swescience-deploy@118.196.152.186 \
-            "mkdir -p /opt/swe-bench-science/deploy/releases/$RELEASE_ID"
-          rsync --archive --compress --delete \
+            bash -se -- "$RELEASE_ID" <<'REMOTE'
+          release_id="$1"
+          if [[ ! "$release_id" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid release id: $release_id" >&2
+            exit 1
+          fi
+
+          deploy_dir=/opt/swe-bench-science/deploy
+          releases_dir="$deploy_dir/releases"
+          release_dir="$releases_dir/$release_id"
+          previous_target="$(readlink -f "$deploy_dir/current" || true)"
+
+          rm -rf -- "$release_dir"
+          mkdir -p "$release_dir"
+
+          if [[ -n "$previous_target" && -d "$previous_target" ]]; then
+            case "$previous_target" in
+              "$releases_dir"/*)
+                cp -al "$previous_target/." "$release_dir/"
+                ;;
+              *)
+                cp -R --preserve=mode,timestamps --reflink=auto \
+                  "$previous_target/." "$release_dir/"
+                ;;
+            esac
+          fi
+          REMOTE
+
+      - name: Upload changed files
+        env:
+          RELEASE_ID: ${{ github.sha }}
+        run: |
+          rsync --archive --checksum --compress --delete \
             out/ \
             "swescience-deploy@118.196.152.186:/opt/swe-bench-science/deploy/releases/$RELEASE_ID/"
 
