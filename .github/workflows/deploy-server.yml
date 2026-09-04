@@ -65,19 +65,21 @@ jobs:
           release_dir="$releases_dir/$release_id"
           previous_target="$(readlink -f "$deploy_dir/current" || true)"
 
-          rm -rf -- "$release_dir"
-          mkdir -p "$release_dir"
+          if [[ "$release_dir" != "$previous_target" ]]; then
+            rm -rf -- "$release_dir"
+            mkdir -p "$release_dir"
 
-          if [[ -n "$previous_target" && -d "$previous_target" ]]; then
-            case "$previous_target" in
-              "$releases_dir"/*)
-                cp -al "$previous_target/." "$release_dir/"
-                ;;
-              *)
-                cp -R --preserve=mode,timestamps --reflink=auto \
-                  "$previous_target/." "$release_dir/"
-                ;;
-            esac
+            if [[ -n "$previous_target" && -d "$previous_target" ]]; then
+              case "$previous_target" in
+                "$releases_dir"/*)
+                  cp -al "$previous_target/." "$release_dir/"
+                  ;;
+                *)
+                  cp -R --preserve=mode,timestamps --reflink=auto \
+                    "$previous_target/." "$release_dir/"
+                  ;;
+              esac
+            fi
           fi
           REMOTE
 
