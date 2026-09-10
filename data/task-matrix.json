@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-01",
+  "generatedAt": "2026-09-10",
   "referenceModel": {
     "id": "nex",
     "label": "Nex N2",
@@ -86,7 +86,7 @@
       "harness": "Codex",
       "scores": {
         "public": 100,
-        "private": 88.19,
+        "private": 83.18,
         "fail2Pass": 80.11,
         "pass2Pass": 95.95,
         "overall": 50.42,
@@ -105,8 +105,8 @@
       "reasoningDepth": "max",
       "harness": "Kimi Code",
       "scores": {
-        "public": 98.32,
-        "private": 66.34,
+        "public": 97.48,
+        "private": 66.13,
         "fail2Pass": 57.55,
         "pass2Pass": 94.94,
         "overall": 35.29,

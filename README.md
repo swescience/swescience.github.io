@@ -24,6 +24,8 @@ All benchmark content lives in [`data/benchmark.json`](data/benchmark.json). Upd
 - task, repository, and domain totals;
 - model configurations, scores, harnesses, and token counts.
 
+Public and private scores are task-level macro-averages: compute each task's test pass fraction first, then average the 119 task fractions with equal weight. Pass@1 is the mean binary reward across the same 119 tasks.
+
 Presentation details such as colors, chart labels, and responsive layout remain in the application code.
 
 Validate an edit before committing:
@@ -32,7 +34,7 @@ Validate an edit before committing:
 npm run data:validate
 ```
 
-The validator rejects duplicate IDs, missing fields, invalid dates, percentages outside `0–100`, and negative token counts. `npm run build` runs this validation automatically.
+The validator rejects duplicate IDs, missing fields, invalid dates, percentages outside `0–100`, negative token counts, and aggregate scores that disagree with the task matrix. `npm run build` runs this validation automatically.
 
 ## Static build
 

@@ -3,14 +3,18 @@ import path from "node:path";
 
 const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const benchmarkRoot = process.env.BENCHMARK_ROOT ?? "/Users/fnlp/workspace/agent/opus-test";
+const uniformTracesRoot = process.env.UNIFORM_TRACES_ROOT
+  ?? "/Users/fnlp/Downloads/gpt56_sol_kimi_k3_ds_v4_pro_max_uniform_traces_20260901";
 
 const paths = {
   opus: process.env.OPUS_SELECTION_FILE
     ?? path.join(benchmarkRoot, "reports/ucloud-opus-max-002-120-audit/selected_runs.json"),
+  astra: process.env.ASTRA_SELECTION_FILE
+    ?? path.join(benchmarkRoot, "reports/gpt-6-astra-official-max-withaux-002-120-audit/selected_runs_and_token_usage.json"),
   kimi: process.env.KIMI_RESULTS_ROOT
-    ?? "/Users/fnlp/Downloads/kimi_k3_ds_v4_pro_max_traces_20260829/kimi-k3-max",
+    ?? path.join(uniformTracesRoot, "kimi-k3-max"),
   deepseek: process.env.DEEPSEEK_RESULTS_ROOT
-    ?? "/Users/fnlp/Downloads/kimi_k3_ds_v4_pro_max_traces_20260829/deepseek-v4-pro-max",
+    ?? path.join(uniformTracesRoot, "deepseek-v4-pro-max"),
   glm: process.env.GLM_SELECTION_FILE
     ?? path.join(benchmarkRoot, "reports/glm-5.2-max-with_auxiliary-002-120-audit/selected_runs_and_evidence.json"),
   qwen: process.env.QWEN_SELECTION_FILE
@@ -180,7 +184,7 @@ const benchmark = JSON.parse(read(path.join(repoRoot, "data/benchmark.json")));
 const nex = benchmark.models.find((model) => model.id === "nex");
 if (!nex) throw new Error("Nex N2 reference model is missing from benchmark.json");
 const targetIds = benchmark.models.filter((model) => model.scores.overall > nex.scores.overall).map((model) => model.id);
-const includedIds = ["opus", "deepseek-pro", "gpt", "kimi", "glm", "qwen-3-8-27b"];
+const includedIds = ["opus", "deepseek-pro", "gpt", "gpt-6-astra", "kimi", "glm", "qwen-3-8-27b"];
 const pendingIds = targetIds.filter((id) => !includedIds.includes(id));
 
 const selectedSources = [
@@ -191,6 +195,7 @@ const selectedSources = [
   { id: "qwen-3-8-27b", file: paths.qwen, source: "Selected Qwen3.8-27B public/private audit" },
 ].map((entry) => ({ ...entry, rows: entry.root ? parseLocalResults(entry.root, entry.id) : parseSelectedRuns(entry.file) }));
 const gptRows = parseGptMaxRows(paths.gpt, selectedSources[0].rows);
+const astraRows = parseSelectedRuns(paths.astra);
 
 const taskIds = [...selectedSources[0].rows.keys()].sort();
 if (taskIds.length !== 119) throw new Error(`Expected 119 tasks, found ${taskIds.length}`);
@@ -212,6 +217,10 @@ for (const taskId of taskIds) {
   const gpt = gptRows.get(taskId);
   if (!gpt) throw new Error(`Missing selected result for GPT Max task ${taskId}`);
   taskResults.gpt = { ...gpt, transition: null, source: "Offline GPT-5.6-sol Max rerun audit" };
+
+  const astra = astraRows.get(taskId);
+  if (!astra) throw new Error(`Missing selected result for GPT-6 Astra Max task ${taskId}`);
+  taskResults["gpt-6-astra"] = { ...astra, transition: null, source: "GPT-6 Astra official Max audit" };
 
   results[publishedId] = {
     publishedTaskId: publishedId,

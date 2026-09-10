@@ -179,21 +179,30 @@ test("keeps matrix metrics aligned with every published trace", async () => {
   }
 });
 
-test("keeps GPT, Astra, Kimi, and DeepSeek trace aggregates aligned with the homepage", async () => {
+test("keeps trace macro-averages aligned with the homepage", async () => {
   const benchmark = JSON.parse(await readFile(new URL("../data/benchmark.json", import.meta.url), "utf8"));
-  const expected = {
-    gpt: ["gpt-5-6-sol-max", 40.34],
-    "gpt-6-astra": ["gpt-6-astra-max", 50.42],
-    "deepseek-pro": ["deepseek-v4-pro-max", 42.02],
-    kimi: ["kimi-k3-max", 35.29],
+  const experiments = {
+    opus: "claude-opus-5-max",
+    gpt: "gpt-5-6-sol-max",
+    "gpt-6-astra": "gpt-6-astra-max",
+    "deepseek-pro": "deepseek-v4-pro-max",
+    kimi: "kimi-k3-max",
+    glm: "glm-5-2-max",
+    "qwen-3-8-27b": "qwen3-8-27b-xhigh",
   };
 
-  for (const [modelId, [experiment, homepageScore]] of Object.entries(expected)) {
+  for (const [modelId, experiment] of Object.entries(experiments)) {
     const index = JSON.parse(await readFile(new URL(`../public/traces/${experiment}/index.json`, import.meta.url), "utf8"));
-    const passCount = index.tasks.filter((task) => task.evaluation.reward === 1).length;
-    const score = Number(((passCount / index.taskCount) * 100).toFixed(2));
-    assert.equal(score, homepageScore, `${modelId} trace aggregate should match homepage`);
-    assert.equal(benchmark.models.find((model) => model.id === modelId)?.scores.overall, homepageScore);
+    const macroAverage = (key) => Number((100 * index.tasks.reduce((sum, task) => (
+      sum + task.evaluation[key].passed / task.evaluation[key].collected
+    ), 0) / index.taskCount).toFixed(2));
+    const passAt1 = Number((100 * index.tasks.reduce((sum, task) => sum + task.evaluation.reward, 0) / index.taskCount).toFixed(2));
+    const homepage = benchmark.models.find((model) => model.id === modelId)?.scores;
+    assert.deepEqual(
+      { public: macroAverage("public"), private: macroAverage("private"), overall: passAt1 },
+      { public: homepage.public, private: homepage.private, overall: homepage.overall },
+      `${modelId} trace macro-averages should match homepage`,
+    );
   }
 });
 
