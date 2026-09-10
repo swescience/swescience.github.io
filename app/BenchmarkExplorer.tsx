@@ -41,6 +41,7 @@ const FAMILY_COMPANIES: Record<string, string> = {
   "DeepSeek-V4-flash": "DeepSeek",
   "GLM-5.2": "Zhipu AI",
   "GPT-5.6-sol": "OpenAI",
+  "GPT-6 Astra": "OpenAI",
   "Kimi-K3": "Moonshot AI",
   "Nex N2": "Nex AGI",
   "Nex-N2-mini": "Nex AGI",
@@ -67,6 +68,7 @@ const COMPANY_COLORS: Record<string, string> = {
 const COMPANY_ORDER = Object.keys(COMPANY_COLORS);
 const FALLBACK_COLORS = ["#1967d2", "#159b76", "#d83c91", "#d97706", "#7c3aed"];
 const DEPTH_ORDER = { default: 0, high: 1, max: 2, xhigh: 3 } as const;
+const SCORE_MAX = 60;
 
 function toModelResults(data: BenchmarkData): ModelResult[] {
   return data.models.map((model, index) => {
@@ -165,7 +167,7 @@ function createLabelLayout(data: ChartDatum[], metricMax: number, chartWidth: nu
   const points = data.map((datum) => ({
     datum,
     x: plotLeft + (datum.x / metricMax) * (plotRight - plotLeft),
-    y: plotTop + (1 - datum.y / 50) * (plotBottom - plotTop),
+    y: plotTop + (1 - datum.y / SCORE_MAX) * (plotBottom - plotTop),
     width: datum.model.length * fontFactor,
   }));
 
@@ -427,8 +429,8 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkData }) {
               <YAxis
                 type="number"
                 dataKey="y"
-                domain={[0, 50]}
-                ticks={[0, 10, 20, 30, 40, 50]}
+                domain={[0, SCORE_MAX]}
+                ticks={[0, 10, 20, 30, 40, 50, 60]}
                 allowDataOverflow
                 tickLine={false}
                 axisLine={{ stroke: chartColors.axis }}
