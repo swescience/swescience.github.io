@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10",
+  "updatedAt": "2026-09-11",
   "summary": {
     "tasks": 119,
     "repositories": 98,
@@ -28,7 +28,7 @@
       "family": "Kimi-K3",
       "reasoningDepth": "max",
       "harness": "Kimi Code",
-      "scores": { "public": 98.32, "private": 66.34, "fail2Pass": 57.55, "pass2Pass": 94.94, "overall": 35.29, "issue": 25, "expert": 44.9, "engineering": 38.89 },
+      "scores": { "public": 97.48, "private": 66.13, "fail2Pass": 57.55, "pass2Pass": 94.94, "overall": 35.29, "issue": 25, "expert": 44.9, "engineering": 38.89 },
       "tokens": { "input": 4.926, "output": 0.06 }
     },
     {
@@ -52,7 +52,7 @@
       "family": "GPT-6 Astra",
       "reasoningDepth": "max",
       "harness": "Codex",
-      "scores": { "public": 100, "private": 88.19, "fail2Pass": 80.11, "pass2Pass": 95.95, "overall": 50.42, "issue": 46.15, "expert": 57.14, "engineering": 44.44 },
+      "scores": { "public": 100, "private": 83.18, "fail2Pass": 80.11, "pass2Pass": 95.95, "overall": 50.42, "issue": 46.15, "expert": 57.14, "engineering": 44.44 },
       "tokens": { "input": 1.404, "output": 0.021 }
     },
     {
