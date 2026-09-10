@@ -25,6 +25,7 @@ test("renders the SWE-bench Science project page", async () => {
   assert.match(html, /Nex N2/);
   assert.match(html, /DeepSeek-V4-flash \(max\)/);
   assert.match(html, /Intern-S2-Preview-397B \(max\)/);
+  assert.match(html, /GPT-6 Astra \(max\)/);
   assert.match(html, /<summary>Tasks in Hard70/);
   assert.match(html, /001, 002, 003, 005/);
   assert.match(html, /114, 116, 117, 119/);
@@ -40,7 +41,7 @@ test("computes the Hard70 leaderboard from task-level results", async () => {
   assert.equal(new Set(hard70.taskIds).size, 70);
   assert.deepEqual(hard70.modelIds, benchmark.models.filter((model) => model.scores.overall > 20).map((model) => model.id));
 
-  const expectedPassCounts = { opus: 15, "deepseek-pro": 14, gpt: 10, kimi: 5, glm: 4, "qwen-3-8-27b": 4, nex: 2, "deepseek-max": 1, "intern-s2-preview-397b": 1 };
+  const expectedPassCounts = { opus: 15, "deepseek-pro": 14, gpt: 10, "gpt-6-astra": 21, kimi: 5, glm: 4, "qwen-3-8-27b": 4, nex: 2, "deepseek-max": 1, "intern-s2-preview-397b": 1 };
   for (const [modelId, expected] of Object.entries(expectedPassCounts)) {
     const supplementalPasses = new Set(supplemental.modelPasses[modelId] ?? []);
     const passed = hard70.taskIds.filter((taskId) => {
@@ -82,6 +83,7 @@ test("publishes the current model trace records per task", async () => {
   assert.deepEqual(registry.experiments.map((experiment) => experiment.id), [
     "claude-opus-5-max",
     "gpt-5-6-sol-max",
+    "gpt-6-astra-max",
     "deepseek-v4-pro-max",
     "kimi-k3-max",
     "glm-5-2-max",
@@ -113,6 +115,9 @@ test("publishes the current model trace records per task", async () => {
       assert.doesNotMatch(nonReasoningText, /\/Users\/fnlp/);
       assert.doesNotMatch(nonReasoningText, /(?:artifacts\/)?model\.patch/);
       assert.doesNotMatch(nonReasoningText, /api\.modelverse\.cn|\.sii\.edu\.cn|linux\/amd64|UCloud|host\.docker\.internal/);
+      if (experiment.id === "gpt-6-astra-max") {
+        assert.doesNotMatch(nonReasoningText, /science-bench-official-gateway|SCIENCE_BENCH_GATEWAY_TOKEN=(?!<redacted>)|\/Users\/fnlp/);
+      }
     }
   }
 
@@ -150,6 +155,7 @@ test("keeps matrix metrics aligned with every published trace", async () => {
   const experiments = {
     opus: "claude-opus-5-max",
     gpt: "gpt-5-6-sol-max",
+    "gpt-6-astra": "gpt-6-astra-max",
     "deepseek-pro": "deepseek-v4-pro-max",
     kimi: "kimi-k3-max",
     glm: "glm-5-2-max",
@@ -173,10 +179,11 @@ test("keeps matrix metrics aligned with every published trace", async () => {
   }
 });
 
-test("keeps GPT, Kimi, and DeepSeek trace aggregates aligned with the homepage", async () => {
+test("keeps GPT, Astra, Kimi, and DeepSeek trace aggregates aligned with the homepage", async () => {
   const benchmark = JSON.parse(await readFile(new URL("../data/benchmark.json", import.meta.url), "utf8"));
   const expected = {
     gpt: ["gpt-5-6-sol-max", 40.34],
+    "gpt-6-astra": ["gpt-6-astra-max", 50.42],
     "deepseek-pro": ["deepseek-v4-pro-max", 42.02],
     kimi: ["kimi-k3-max", 35.29],
   };
@@ -188,6 +195,26 @@ test("keeps GPT, Kimi, and DeepSeek trace aggregates aligned with the homepage",
     assert.equal(score, homepageScore, `${modelId} trace aggregate should match homepage`);
     assert.equal(benchmark.models.find((model) => model.id === modelId)?.scores.overall, homepageScore);
   }
+});
+
+test("publishes complete GPT-6 Astra trace metadata", async () => {
+  const trace = JSON.parse(await readFile(new URL("../public/traces/gpt-6-astra-max/task-002.json", import.meta.url), "utf8"));
+  assert.deepEqual(
+    {
+      input: trace.usage.inputTokens,
+      output: trace.usage.outputTokens,
+      total: trace.usage.totalTokens,
+      cacheRead: trace.usage.cacheReadTokens,
+      calls: trace.usage.callCount,
+    },
+    { input: 1067661, output: 15111, total: 1082772, cacheRead: 951808, calls: 21 },
+  );
+  assert.ok(trace.events.some((event) => event.kind === "thinking" && event.reasoningStatus === "encrypted"));
+  assert.ok(trace.events.some((event) => event.kind === "tool" && event.elapsedSec > 0));
+  assert.equal(trace.evaluation.public.passed, 1);
+  assert.equal(trace.evaluation.private.passed, 8);
+  assert.equal(trace.evaluation.private.collected, 8);
+  assert.equal(trace.evaluation.reward, 1);
 });
 
 test("publishes the offline GPT Max rerun in the matrix with a matching trace entry", async () => {
