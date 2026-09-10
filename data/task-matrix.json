@@ -12,6 +12,7 @@
     "opus",
     "deepseek-pro",
     "gpt",
+    "gpt-6-astra",
     "kimi",
     "glm",
     "qwen-3-8-27b"
@@ -76,6 +77,26 @@
       "tokens": {
         "input": 3.921,
         "output": 0.027
+      }
+    },
+    {
+      "id": "gpt-6-astra",
+      "family": "GPT-6 Astra",
+      "reasoningDepth": "max",
+      "harness": "Codex",
+      "scores": {
+        "public": 100,
+        "private": 88.19,
+        "fail2Pass": 80.11,
+        "pass2Pass": 95.95,
+        "overall": 50.42,
+        "issue": 46.15,
+        "expert": 57.14,
+        "engineering": 44.44
+      },
+      "tokens": {
+        "input": 1.404,
+        "output": 0.021
       }
     },
     {
@@ -222,6 +243,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 3
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -307,6 +341,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -392,6 +439,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -477,6 +537,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 15,
+            "total": 15
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -562,6 +635,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 4
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -647,6 +733,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 13
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -732,6 +831,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -817,6 +929,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -902,6 +1027,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 9
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -987,6 +1125,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 11
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1072,6 +1223,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 3,
+            "total": 5
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1157,6 +1321,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1242,6 +1419,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1327,6 +1517,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1412,6 +1615,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 31,
+            "total": 31
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1497,6 +1713,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 12,
+            "total": 12
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1582,6 +1811,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 12,
+            "total": 12
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1667,6 +1909,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1752,6 +2007,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 14
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1837,6 +2105,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 12
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -1922,6 +2203,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 15
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2007,6 +2301,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 12,
+            "total": 12
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2092,6 +2399,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2177,6 +2497,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 8
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2262,6 +2595,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2347,6 +2693,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 9
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2432,6 +2791,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 21,
+            "total": 21
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2517,6 +2889,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 10
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2602,6 +2987,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 29,
+            "total": 29
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2687,6 +3085,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 10
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2772,6 +3183,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 41,
+            "total": 41
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2857,6 +3281,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 21,
+            "total": 21
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -2942,6 +3379,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3027,6 +3477,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3112,6 +3575,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 14,
+            "total": 14
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3197,6 +3673,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 9
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3282,6 +3771,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 13
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3367,6 +3869,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 15,
+            "total": 15
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3452,6 +3967,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 11
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3537,6 +4065,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 3
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3622,6 +4163,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 24,
+            "total": 24
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3707,6 +4261,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 15,
+            "total": 16
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3792,6 +4359,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 3,
+            "total": 8
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3877,6 +4457,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 15
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -3962,6 +4555,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 16,
+            "total": 16
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4047,6 +4653,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4132,6 +4751,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4217,6 +4849,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 13
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4302,6 +4947,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 13
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4387,6 +5045,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 11
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4472,6 +5143,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4557,6 +5241,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 15,
+            "total": 16
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4642,6 +5339,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4727,6 +5437,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 7
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4812,6 +5535,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 18
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4897,6 +5633,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 10
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -4982,6 +5731,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 11
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5067,6 +5829,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 9
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5152,6 +5927,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 9
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5237,6 +6025,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 11
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5322,6 +6123,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5407,6 +6221,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 16,
+            "total": 17
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5492,6 +6319,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 18
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5577,6 +6417,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5662,6 +6515,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 7
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5747,6 +6613,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 6
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5832,6 +6711,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 6
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -5917,6 +6809,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 3
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6002,6 +6907,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 4
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6087,6 +7005,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 9
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6172,6 +7103,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 3,
+            "total": 5
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6257,6 +7201,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6342,6 +7299,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 6
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6427,6 +7397,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6512,6 +7495,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 8
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6597,6 +7593,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6682,6 +7691,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 13
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6767,6 +7789,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 42,
+            "total": 42
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6852,6 +7887,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 13,
+            "total": 14
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -6937,6 +7985,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 14,
+            "total": 15
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7022,6 +8083,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7107,6 +8181,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 7
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7192,6 +8279,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 1,
+            "total": 3
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7277,6 +8377,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7362,6 +8475,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7447,6 +8573,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 3,
+            "total": 4
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7532,6 +8671,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7617,6 +8769,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7702,6 +8867,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 4
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7787,6 +8965,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 6
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7872,6 +9063,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 3,
+            "total": 3
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -7957,6 +9161,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 9
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8042,6 +9259,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 4
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8127,6 +9357,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 5
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8212,6 +9455,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 8
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8297,6 +9553,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 8
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8382,6 +9651,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 7
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8467,6 +9749,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 11
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8552,6 +9847,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 4
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8637,6 +9945,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 8,
+            "total": 8
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8722,6 +10043,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 10
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8807,6 +10141,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 4
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8892,6 +10239,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 4,
+            "total": 4
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -8977,6 +10337,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 7,
+            "total": 7
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9062,6 +10435,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 4
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9147,6 +10533,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 37,
+            "total": 37
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9232,6 +10631,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 2,
+            "total": 3
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9317,6 +10729,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 23,
+            "total": 23
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9402,6 +10827,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 6
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9487,6 +10925,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 10,
+            "total": 10
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9572,6 +11023,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9657,6 +11121,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 5
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9742,6 +11219,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 11,
+            "total": 13
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9827,6 +11317,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 5,
+            "total": 15
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9912,6 +11415,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 97,
+            "total": 97
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -9997,6 +11513,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 85,
+            "total": 93
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -10082,6 +11611,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 6,
+            "total": 6
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -10167,6 +11709,19 @@
           "reward": 1,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 9
+          },
+          "reward": 1,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     },
@@ -10252,6 +11807,19 @@
           "reward": 0,
           "transition": null,
           "source": "Offline GPT-5.6-sol Max rerun audit"
+        },
+        "gpt-6-astra": {
+          "public": {
+            "passed": 1,
+            "total": 1
+          },
+          "private": {
+            "passed": 9,
+            "total": 10
+          },
+          "reward": 0,
+          "transition": null,
+          "source": "GPT-6 Astra official Max audit"
         }
       }
     }
