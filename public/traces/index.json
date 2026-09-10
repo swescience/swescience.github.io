@@ -16,6 +16,13 @@
       "taskCount": 119
     },
     {
+      "id": "gpt-6-astra-max",
+      "label": "GPT-6 Astra Max",
+      "harness": "Codex",
+      "path": "gpt-6-astra-max",
+      "taskCount": 119
+    },
+    {
       "id": "deepseek-v4-pro-max",
       "label": "DeepSeek-V4-Pro Max",
       "harness": "Claude Code",

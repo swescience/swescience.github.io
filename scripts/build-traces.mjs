@@ -106,7 +106,12 @@ function firstValue(row, keys) {
 
 function readTokenUsage(file) {
   if (!fs.existsSync(file)) throw new Error(`Missing token usage source: ${file}`);
-  const rows = parseCsv(fs.readFileSync(file, "utf8"));
+  const rows = file.endsWith(".json")
+    ? (readJson(file).tasks ?? []).map((task) => ({
+      task_id: task.task_id,
+      ...task.usage,
+    }))
+    : parseCsv(fs.readFileSync(file, "utf8"));
   if (rows.length !== 119) throw new Error(`Expected 119 token usage rows in ${file}, found ${rows.length}`);
   const usageByTask = new Map();
   for (const row of rows) {
@@ -145,6 +150,8 @@ function sanitizeText(value, runRoot) {
     .replace(/api\.modelverse\.cn/gi, "<redacted>")
     .replace(/[a-z0-9.-]+\.sii\.edu\.cn/gi, "<redacted>")
     .replace(/host\.docker\.internal(?::\d+)?/gi, "<redacted>")
+    .replace(/science-bench-official-gateway-[a-z0-9-]+(?::\d+)?/gi, "<redacted>")
+    .replace(/\b(ANTHROPIC_AUTH_TOKEN|CODEX_ACCESS_TOKEN|SCIENCE_BENCH_GATEWAY_TOKEN)\s*=\s*[^\s]+/g, "$1=<redacted>")
     .replace(/\bartifacts\/model\.patch\b/gi, "<patch-omitted>")
     .replace(/\bmodel\.patch\b/gi, "<patch-omitted>")
     .replace(/\bUCloud\b/g, "<redacted>")
@@ -271,10 +278,24 @@ function rolloutCommand(item) {
   }
 }
 
+function rolloutCustomCommands(item) {
+  if (item?.type !== "custom_tool_call" || typeof item.input !== "string") return [];
+  const commands = [];
+  const pattern = /\bcmd\s*:\s*("(?:\\.|[^"\\])*")/g;
+  for (const match of item.input.matchAll(pattern)) {
+    try {
+      commands.push(JSON.parse(match[1]));
+    } catch {
+      // An unparsable command cannot be matched to the canonical trajectory.
+    }
+  }
+  return commands;
+}
+
 // The canonical Codex trajectory omits per-event timestamps, while the local
 // rollout stream retains them. Keep readable reasoning and a typed timestamp
 // queue so normalized events can recover their actual elapsed times.
-function readCodexRolloutTimeline(runRoot) {
+function readCodexRolloutTimeline(runRoot, includeCustomTools = false) {
   const rolloutFiles = codexRolloutFiles(runRoot);
   const anchors = [];
   const messages = [];
@@ -318,6 +339,22 @@ function readCodexRolloutTimeline(runRoot) {
         } else {
           commands.push({ timestamp, command: rolloutCommand(item) });
           visibleAnchor += 1;
+        }
+      } else if (includeCustomTools && item.type === "custom_tool_call") {
+        const customCommands = rolloutCustomCommands(item);
+        if (/\btools\.apply_patch\s*\(/.test(item.input ?? "")) {
+          patches.push({ timestamp, command: item.input, remaining: 1 });
+          visibleAnchor += 1;
+        } else if (customCommands.length) {
+          for (const command of customCommands) {
+            commands.push({ timestamp, command });
+            visibleAnchor += 1;
+          }
+        } else if (/\bexec_command\b/.test(item.input ?? "")) {
+          commands.push({ timestamp, command: "" });
+          visibleAnchor += 1;
+        } else if (/\bupdate_plan\b/.test(item.input ?? "")) {
+          planUpdates.push({ timestamp });
         }
       }
     });
@@ -748,6 +785,14 @@ function normalizeCodexEvents(events, runRoot, model, timeline = {}) {
     return records[index];
   };
 
+  const consumePatch = (paths) => {
+    let record = patchRecords.find((candidate) => candidate.remaining > 0 && paths.some((file) => candidate.command.includes(file)));
+    if (!record) record = patchRecords.find((candidate) => candidate.remaining > 0);
+    if (!record) return null;
+    record.remaining -= 1;
+    return record;
+  };
+
   const flushReasoning = () => {
     while (reasoningIndex < reasoningAnchors.length && reasoningAnchors[reasoningIndex].position <= visibleAnchor) {
       const reasoning = reasoningAnchors[reasoningIndex];
@@ -808,7 +853,7 @@ function normalizeCodexEvents(events, runRoot, model, timeline = {}) {
 
     if (item.type === "file_change") {
       const paths = (item.changes ?? []).map((change) => change.path).filter(Boolean);
-      const record = consume(patchRecords, (candidate) => paths.some((file) => candidate.command.includes(file)));
+      const record = consumePatch(paths);
       addAnchored("tool", {
         toolUseId: item.id ?? null,
         name: "File edit",
@@ -942,6 +987,17 @@ const baseExperiments = [
     parser: "codex",
     outputDir: "gpt-5-6-sol-max",
     resultsRoot: localResultRoots.gpt,
+  },
+  {
+    id: "gpt-6-astra-max",
+    label: "GPT-6 Astra Max",
+    model: "GPT-6 Astra",
+    harness: "Codex",
+    parser: "codex",
+    customToolTimeline: true,
+    outputDir: "gpt-6-astra-max",
+    auditFile: path.join(reportsRoot, "gpt-6-astra-official-max-withaux-002-120-audit/selected_runs_and_token_usage.json"),
+    tokenUsageFile: path.join(reportsRoot, "gpt-6-astra-official-max-withaux-002-120-audit/selected_runs_and_token_usage.json"),
   },
   {
     id: "deepseek-v4-pro-max",
@@ -1081,7 +1137,7 @@ function buildTask(experiment, legacyTaskId, runMap, tokenUsageMap) {
   const publishedTask = taskById.get(publishedTaskId);
   if (!publishedTask) throw new Error(`Missing published task ${publishedTaskId} in data/tasks.csv`);
   const trajectoryHasReasoning = trajectory.events?.some((event) => event?.item?.type === "reasoning");
-  const codexTimeline = experiment.parser === "codex" ? readCodexRolloutTimeline(runRoot) : null;
+  const codexTimeline = experiment.parser === "codex" ? readCodexRolloutTimeline(runRoot, experiment.customToolTimeline) : null;
   const kimiTimeline = experiment.parser === "kimi" ? readKimiTimeline(runRoot) : null;
   const events = experiment.parser === "codex"
     ? normalizeCodexEvents(trajectory.events ?? [], runRoot, experiment.model, {
