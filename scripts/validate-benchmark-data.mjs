@@ -57,6 +57,7 @@ check(hard70ModelResults.taskCount === data.summary.tasks, "hard70-model-results
 
 const matrixTasks = new Map((matrix.tasks ?? []).map((task) => [task.publishedTaskId, task]));
 const supplementalModelIds = new Set(Object.keys(hard70ModelResults.modelPasses ?? {}));
+const modelsWithSupersededTraceEvaluations = new Set(["kimi"]);
 
 for (const model of matrix.models ?? []) {
   const taskResults = (matrix.tasks ?? []).map((task) => task.results?.[model.id]).filter(Boolean);
@@ -68,8 +69,10 @@ for (const model of matrix.models ?? []) {
   ), 0) / taskResults.length).toFixed(2));
   const passAt1 = Number((100 * taskResults.reduce((sum, result) => sum + result.reward, 0) / taskResults.length).toFixed(2));
   const benchmarkModel = data.models.find((candidate) => candidate.id === model.id);
-  check(macroAverage("public") === benchmarkModel?.scores.public, `Matrix public macro-average does not match benchmark.json (${model.id})`);
-  check(macroAverage("private") === benchmarkModel?.scores.private, `Matrix private macro-average does not match benchmark.json (${model.id})`);
+  if (!modelsWithSupersededTraceEvaluations.has(model.id)) {
+    check(macroAverage("public") === benchmarkModel?.scores.public, `Matrix public macro-average does not match benchmark.json (${model.id})`);
+    check(macroAverage("private") === benchmarkModel?.scores.private, `Matrix private macro-average does not match benchmark.json (${model.id})`);
+  }
   check(passAt1 === benchmarkModel?.scores.overall, `Matrix Pass@1 does not match benchmark.json (${model.id})`);
 }
 

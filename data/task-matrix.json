@@ -105,8 +105,8 @@
       "reasoningDepth": "max",
       "harness": "Kimi Code",
       "scores": {
-        "public": 97.48,
-        "private": 66.13,
+        "public": 98.32,
+        "private": 66.34,
         "fail2Pass": 57.55,
         "pass2Pass": 94.94,
         "overall": 35.29,
