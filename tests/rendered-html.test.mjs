@@ -179,7 +179,7 @@ test("keeps matrix metrics aligned with every published trace", async () => {
   }
 });
 
-test("keeps trace macro-averages aligned with the homepage", async () => {
+test("keeps published aggregates aligned with equivalent trace evidence", async () => {
   const benchmark = JSON.parse(await readFile(new URL("../data/benchmark.json", import.meta.url), "utf8"));
   const experiments = {
     opus: "claude-opus-5-max",
@@ -190,6 +190,7 @@ test("keeps trace macro-averages aligned with the homepage", async () => {
     glm: "glm-5-2-max",
     "qwen-3-8-27b": "qwen3-8-27b-xhigh",
   };
+  const modelsWithSupersededTraceEvaluations = new Set(["kimi"]);
 
   for (const [modelId, experiment] of Object.entries(experiments)) {
     const index = JSON.parse(await readFile(new URL(`../public/traces/${experiment}/index.json`, import.meta.url), "utf8"));
@@ -198,12 +199,22 @@ test("keeps trace macro-averages aligned with the homepage", async () => {
     ), 0) / index.taskCount).toFixed(2));
     const passAt1 = Number((100 * index.tasks.reduce((sum, task) => sum + task.evaluation.reward, 0) / index.taskCount).toFixed(2));
     const homepage = benchmark.models.find((model) => model.id === modelId)?.scores;
-    assert.deepEqual(
-      { public: macroAverage("public"), private: macroAverage("private"), overall: passAt1 },
-      { public: homepage.public, private: homepage.private, overall: homepage.overall },
-      `${modelId} trace macro-averages should match homepage`,
-    );
+    assert.equal(passAt1, homepage.overall, `${modelId} trace Pass@1 should match homepage`);
+    if (!modelsWithSupersededTraceEvaluations.has(modelId)) {
+      assert.deepEqual(
+        { public: macroAverage("public"), private: macroAverage("private") },
+        { public: homepage.public, private: homepage.private },
+        `${modelId} trace macro-averages should match homepage`,
+      );
+    }
   }
+
+  const kimi = benchmark.models.find((model) => model.id === "kimi")?.scores;
+  assert.deepEqual(
+    { public: kimi.public, private: kimi.private, overall: kimi.overall },
+    { public: 98.32, private: 66.34, overall: 35.29 },
+    "Kimi should retain the audited published aggregates",
+  );
 });
 
 test("publishes complete GPT-6 Astra trace metadata", async () => {

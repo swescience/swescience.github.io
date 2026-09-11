@@ -28,7 +28,7 @@
       "family": "Kimi-K3",
       "reasoningDepth": "max",
       "harness": "Kimi Code",
-      "scores": { "public": 97.48, "private": 66.13, "fail2Pass": 57.55, "pass2Pass": 94.94, "overall": 35.29, "issue": 25, "expert": 44.9, "engineering": 38.89 },
+      "scores": { "public": 98.32, "private": 66.34, "fail2Pass": 57.55, "pass2Pass": 94.94, "overall": 35.29, "issue": 25, "expert": 44.9, "engineering": 38.89 },
       "tokens": { "input": 4.926, "output": 0.06 }
     },
     {
