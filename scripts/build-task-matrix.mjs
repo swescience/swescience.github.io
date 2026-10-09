@@ -5,6 +5,8 @@ const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const benchmarkRoot = process.env.BENCHMARK_ROOT ?? "/Users/fnlp/workspace/agent/opus-test";
 const uniformTracesRoot = process.env.UNIFORM_TRACES_ROOT
   ?? "/Users/fnlp/Downloads/gpt56_sol_kimi_k3_ds_v4_pro_max_uniform_traces_20260901";
+const deepseekOverrideFile = process.env.DEEPSEEK_RUN_OVERRIDES_FILE
+  ?? path.join(repoRoot, "scripts/data/deepseek-v4-pro-run-overrides.json");
 
 const paths = {
   opus: process.env.OPUS_SELECTION_FILE
@@ -92,7 +94,40 @@ function normalizeTaskId(value) {
   return String(value ?? "").replace(/^task_/, "").padStart(3, "0");
 }
 
-function parseLocalResults(root, label) {
+function readRunOverrides(file) {
+  const overrides = JSON.parse(read(file));
+  if (overrides.version !== 1 || !overrides.runs || typeof overrides.runs !== "object") {
+    throw new Error(`Invalid run override file: ${file}`);
+  }
+  const rows = new Map();
+  for (const [taskId, relativePath] of Object.entries(overrides.runs)) {
+    const normalizedTaskId = normalizeTaskId(taskId);
+    if (!/^\d{3}$/.test(normalizedTaskId) || Number(normalizedTaskId) < 2 || Number(normalizedTaskId) > 119) {
+      throw new Error(`Override has invalid historical task id ${taskId} in ${file}`);
+    }
+    if (typeof relativePath !== "string" || path.isAbsolute(relativePath)) {
+      throw new Error(`Override ${taskId} must use a benchmark-root-relative run path in ${file}`);
+    }
+    rows.set(normalizedTaskId, path.join(benchmarkRoot, relativePath));
+  }
+  return { source: String(overrides.source ?? "Network-fixed rerun"), rows };
+}
+
+function parseOverrideRun(runRoot, taskId, label, source) {
+  if (!fs.existsSync(runRoot)) throw new Error(`Missing ${label} override run for task ${taskId}: ${runRoot}`);
+  const trial = JSON.parse(read(path.join(runRoot, "trial.json")));
+  const reportedTaskId = normalizeTaskId(trial.task_metadata?.task_id);
+  if (reportedTaskId !== taskId) throw new Error(`${label} override path does not match task ${taskId}: ${runRoot}`);
+  const reward = JSON.parse(read(path.join(runRoot, "artifacts/reward.json")));
+  const publicMetric = metric(reward.public_summary);
+  const privateMetric = metric(reward.private_summary);
+  if (!publicMetric || !privateMetric) throw new Error(`${label} override task_${taskId} has incomplete verifier metrics`);
+  const rewardValue = Number(reward.reward);
+  if (!Number.isFinite(rewardValue)) throw new Error(`${label} override task_${taskId} has no numeric reward`);
+  return { public: publicMetric, private: privateMetric, reward: rewardValue, source };
+}
+
+function parseLocalResults(root, label, overrides = null) {
   if (!fs.existsSync(root)) throw new Error(`Missing ${label} results directory: ${root}`);
   const taskDirectories = fs.readdirSync(root, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && /^task_\d{3}$/.test(entry.name))
@@ -131,6 +166,12 @@ function parseLocalResults(root, label) {
     const rewardValue = Number(reward.reward);
     if (!Number.isFinite(rewardValue)) throw new Error(`${label} task_${taskId} has no numeric reward.json reward`);
     rows.set(taskId, { public: publicMetric, private: privateMetric, reward: rewardValue });
+  }
+
+  if (overrides) {
+    for (const [taskId, runRoot] of overrides.rows) {
+      rows.set(taskId, parseOverrideRun(runRoot, taskId, label, overrides.source));
+    }
   }
 
   if (rows.size !== 119 || !rows.has("120") || rows.has("001")) {
@@ -189,11 +230,11 @@ const pendingIds = targetIds.filter((id) => !includedIds.includes(id));
 
 const selectedSources = [
   { id: "opus", file: paths.opus, source: "Selected Claude Opus Max public/private audit" },
-  { id: "deepseek-pro", root: paths.deepseek, source: "Selected DeepSeek-V4-Pro public/private audit" },
+  { id: "deepseek-pro", root: paths.deepseek, source: "Selected DeepSeek-V4-Pro public/private audit", overrides: readRunOverrides(deepseekOverrideFile) },
   { id: "kimi", root: paths.kimi, source: "Selected Kimi-K3 public/private audit" },
   { id: "glm", file: paths.glm, source: "Selected GLM-5.2 public/private audit" },
   { id: "qwen-3-8-27b", file: paths.qwen, source: "Selected Qwen3.8-27B public/private audit" },
-].map((entry) => ({ ...entry, rows: entry.root ? parseLocalResults(entry.root, entry.id) : parseSelectedRuns(entry.file) }));
+].map((entry) => ({ ...entry, rows: entry.root ? parseLocalResults(entry.root, entry.id, entry.overrides) : parseSelectedRuns(entry.file) }));
 const gptRows = parseGptMaxRows(paths.gpt, selectedSources[0].rows);
 const astraRows = parseSelectedRuns(paths.astra);
 
@@ -211,7 +252,7 @@ for (const taskId of taskIds) {
   for (const entry of selectedSources) {
     const result = entry.rows.get(taskId);
     if (!result) throw new Error(`Missing selected result for ${entry.id} task ${taskId}`);
-    taskResults[entry.id] = { ...result, transition: null, source: entry.source };
+    taskResults[entry.id] = { ...result, transition: null, source: result.source ?? entry.source };
   }
 
   const gpt = gptRows.get(taskId);

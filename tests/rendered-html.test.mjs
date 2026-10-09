@@ -18,7 +18,7 @@ test("renders the SWE-bench Science project page", async () => {
   assert.match(html, /select the 70 tasks with the lowest mean reward as this subset/);
   assert.match(html, /href="#hard70">\(HARD70\)/);
   assert.match(html, /21\.43%/);
-  assert.match(html, /20\.00%/);
+  assert.match(html, /17\.14%/);
   assert.match(html, /14\.29%/);
   assert.match(html, /Input tokens \/ task/);
   assert.match(html, /21\.990/);
@@ -41,7 +41,7 @@ test("computes the Hard70 leaderboard from task-level results", async () => {
   assert.equal(new Set(hard70.taskIds).size, 70);
   assert.deepEqual(hard70.modelIds, benchmark.models.filter((model) => model.scores.overall > 20).map((model) => model.id));
 
-  const expectedPassCounts = { opus: 15, "deepseek-pro": 14, gpt: 10, "gpt-6-astra": 21, kimi: 5, glm: 4, "qwen-3-8-27b": 4, nex: 2, "deepseek-max": 1, "intern-s2-preview-397b": 1 };
+  const expectedPassCounts = { opus: 15, "deepseek-pro": 12, gpt: 10, "gpt-6-astra": 21, kimi: 5, glm: 4, "qwen-3-8-27b": 4, nex: 2, "deepseek-max": 1, "intern-s2-preview-397b": 1 };
   for (const [modelId, expected] of Object.entries(expectedPassCounts)) {
     const supplementalPasses = new Set(supplemental.modelPasses[modelId] ?? []);
     const passed = hard70.taskIds.filter((taskId) => {
@@ -177,6 +177,37 @@ test("keeps matrix metrics aligned with every published trace", async () => {
       );
     }
   }
+});
+
+test("uses the corrected DeepSeek-V4-Pro runs consistently", async () => {
+  const matrix = JSON.parse(await readFile(new URL("../data/task-matrix.json", import.meta.url), "utf8"));
+  const benchmark = JSON.parse(await readFile(new URL("../data/benchmark.json", import.meta.url), "utf8"));
+  const expected = {
+    "079": { privatePassed: 5, privateTotal: 14 },
+    "104": { privatePassed: 0, privateTotal: 7 },
+    "107": { privatePassed: 2, privateTotal: 3 },
+  };
+
+  for (const [taskId, expectedEvaluation] of Object.entries(expected)) {
+    const matrixResult = matrix.tasks.find((task) => task.publishedTaskId === taskId).results["deepseek-pro"];
+    const trace = JSON.parse(await readFile(new URL(`../public/traces/deepseek-v4-pro-max/task-${taskId}.json`, import.meta.url), "utf8"));
+    assert.equal(matrixResult.source, "Selected DeepSeek-V4-Pro public/private audit");
+    assert.deepEqual(
+      { privatePassed: matrixResult.private.passed, privateTotal: matrixResult.private.total, reward: matrixResult.reward },
+      { ...expectedEvaluation, reward: 0 },
+    );
+    assert.deepEqual(
+      { privatePassed: trace.evaluation.private.passed, privateTotal: trace.evaluation.private.collected, reward: trace.evaluation.reward },
+      { ...expectedEvaluation, reward: 0 },
+    );
+    assert.equal(trace.evaluation.verifierReturnCode, 1);
+  }
+
+  const deepseek = benchmark.models.find((model) => model.id === "deepseek-pro");
+  assert.deepEqual(
+    { public: deepseek.scores.public, private: deepseek.scores.private, overall: deepseek.scores.overall },
+    { public: 100, private: 71.5, overall: 39.5 },
+  );
 });
 
 test("keeps published aggregates aligned with equivalent trace evidence", async () => {

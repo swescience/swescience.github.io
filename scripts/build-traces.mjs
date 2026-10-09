@@ -16,6 +16,8 @@ let gptExtractedRunsRoot = null;
 const obsoleteOutputRoot = path.join(repoRoot, "public/traces/opus-5-max-ucloud");
 const uniformTracesRoot = process.env.UNIFORM_TRACES_ROOT
   ?? "/Users/fnlp/Downloads/gpt56_sol_kimi_k3_ds_v4_pro_max_uniform_traces_20260901";
+const deepseekOverrideFile = process.env.DEEPSEEK_RUN_OVERRIDES_FILE
+  ?? path.join(repoRoot, "scripts/data/deepseek-v4-pro-run-overrides.json");
 
 const tokenUsageFiles = {
   opus: process.env.OPUS_TOKEN_USAGE_FILE
@@ -51,6 +53,21 @@ function runArtifact(runRoot, name) {
   const file = candidates.find((candidate) => fs.existsSync(candidate));
   if (!file) throw new Error(`Missing ${name} under selected run ${runRoot}`);
   return file;
+}
+
+function readRunOverrides(file) {
+  const overrides = readJson(file);
+  if (overrides.version !== 1 || !overrides.runs || typeof overrides.runs !== "object") {
+    throw new Error(`Invalid run override file: ${file}`);
+  }
+  const runs = new Map();
+  for (const [taskId, relativePath] of Object.entries(overrides.runs)) {
+    if (!/^\d{3}$/.test(taskId) || Number(taskId) < 2 || Number(taskId) > 119 || typeof relativePath !== "string" || path.isAbsolute(relativePath)) {
+      throw new Error(`Invalid override entry for task ${taskId} in ${file}`);
+    }
+    runs.set(taskId, path.join(benchmarkRoot, relativePath));
+  }
+  return runs;
 }
 
 function parseCsv(text) {
@@ -921,7 +938,7 @@ function parseEvaluation(verifierLog, trial, runRoot) {
     private: privateMetric,
     reward: summary?.reward ?? (trial.verifier?.return_code === 0 ? 1 : 0),
     scoreMode: summary?.score_mode ?? "private_only",
-    verifierReturnCode: trial.verifier?.return_code ?? null,
+    verifierReturnCode: trial.verifier?.return_code ?? trial.timings?.verifier?.return_code ?? summary?.private?.return_code ?? null,
     logSummary: compactLog,
     verifierLog: sanitizeText(verifierLog, runRoot),
   };
@@ -1007,6 +1024,7 @@ const baseExperiments = [
     parser: "claude",
     outputDir: "deepseek-v4-pro-max",
     resultsRoot: localResultRoots.deepseek,
+    runOverrides: readRunOverrides(deepseekOverrideFile),
   },
   {
     id: "kimi-k3-max",
@@ -1102,6 +1120,10 @@ function selectedRunMap(experiment) {
     }
     if (selected.size !== 119 || selected.has("001") || !selected.has("120")) {
       throw new Error(`${experiment.id} results do not contain exactly the historical 002-120 scope`);
+    }
+    for (const [taskId, runRoot] of experiment.runOverrides ?? []) {
+      if (!fs.existsSync(runRoot)) throw new Error(`Missing ${experiment.id} override run for task ${taskId}: ${runRoot}`);
+      selected.set(taskId, runRoot);
     }
     return selected;
   }

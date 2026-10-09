@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "experiment": "deepseek-v4-pro-max",
+  "source": "Selected DeepSeek-V4-Pro public/private audit",
+  "runs": {
+    "079": "runs/task_079/deepseek-v4-pro-max-with_auxiliary-079-deepseek-v4-pro-max-official-withaux-network-fixed-3-20261009-r1",
+    "104": "runs/task_104/deepseek-v4-pro-max-with_auxiliary-104-deepseek-v4-pro-max-official-withaux-network-fixed-104-107-20261009-r2",
+    "107": "runs/task_107/deepseek-v4-pro-max-with_auxiliary-107-deepseek-v4-pro-max-official-withaux-network-fixed-104-107-20261009-r2"
+  }
+}
