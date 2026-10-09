@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-11",
+  "updatedAt": "2026-10-09",
   "summary": {
     "tasks": 119,
     "repositories": 98,
@@ -20,8 +20,8 @@
       "family": "DeepSeek-V4-Pro",
       "reasoningDepth": "max",
       "harness": "Claude Code",
-      "scores": { "public": 100, "private": 73.16, "fail2Pass": 65.77, "pass2Pass": 96.58, "overall": 42.02, "issue": 26.92, "expert": 57.14, "engineering": 44.44 },
-      "tokens": { "input": 11.43, "output": 0.092 }
+      "scores": { "public": 100, "private": 71.5, "fail2Pass": 63.81, "pass2Pass": 96.58, "overall": 39.5, "issue": 26.92, "expert": 53.06, "engineering": 38.89 },
+      "tokens": { "input": 11.204, "output": 0.091 }
     },
     {
       "id": "kimi",

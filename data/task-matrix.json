@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-10",
+  "generatedAt": "2026-10-09",
   "referenceModel": {
     "id": "nex",
     "label": "Nex N2",
@@ -46,17 +46,17 @@
       "harness": "Claude Code",
       "scores": {
         "public": 100,
-        "private": 73.16,
-        "fail2Pass": 65.77,
+        "private": 71.5,
+        "fail2Pass": 63.81,
         "pass2Pass": 96.58,
-        "overall": 42.02,
+        "overall": 39.5,
         "issue": 26.92,
-        "expert": 57.14,
-        "engineering": 44.44
+        "expert": 53.06,
+        "engineering": 38.89
       },
       "tokens": {
-        "input": 11.43,
-        "output": 0.092
+        "input": 11.204,
+        "output": 0.091
       }
     },
     {
@@ -7829,12 +7829,12 @@
             "total": 1
           },
           "private": {
-            "passed": 14,
+            "passed": 5,
             "total": 14
           },
-          "reward": 1,
-          "transition": null,
-          "source": "Selected DeepSeek-V4-Pro public/private audit"
+          "reward": 0,
+          "source": "Selected DeepSeek-V4-Pro public/private audit",
+          "transition": null
         },
         "kimi": {
           "public": {
@@ -10279,12 +10279,12 @@
             "total": 1
           },
           "private": {
-            "passed": 7,
+            "passed": 0,
             "total": 7
           },
-          "reward": 1,
-          "transition": null,
-          "source": "Selected DeepSeek-V4-Pro public/private audit"
+          "reward": 0,
+          "source": "Selected DeepSeek-V4-Pro public/private audit",
+          "transition": null
         },
         "kimi": {
           "public": {
@@ -10573,12 +10573,12 @@
             "total": 1
           },
           "private": {
-            "passed": 3,
+            "passed": 2,
             "total": 3
           },
-          "reward": 1,
-          "transition": null,
-          "source": "Selected DeepSeek-V4-Pro public/private audit"
+          "reward": 0,
+          "source": "Selected DeepSeek-V4-Pro public/private audit",
+          "transition": null
         },
         "kimi": {
           "public": {
